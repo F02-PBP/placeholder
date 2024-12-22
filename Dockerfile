@@ -1,17 +1,15 @@
 FROM python:3.9
-
 WORKDIR /app
-
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-
 COPY . .
 
 RUN mkdir -p static
-RUN chmod 755 db.sqlite3 
+RUN chmod 755 db.sqlite3
 
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
+ENV DEBUG=False  
 
 RUN python manage.py collectstatic --noinput
 

@@ -167,7 +167,7 @@ if DEBUG:
         BASE_DIR / 'static' # merujuk ke /static root project pada mode development
     ]
 else:
-    STATIC_ROOT = BASE_DIR / 'static_dev' # merujuk ke /static root project pada mode production
+    STATIC_ROOT = BASE_DIR / 'static' # merujuk ke /static root project pada mode production
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

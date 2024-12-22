@@ -1,4 +1,4 @@
-FROM python:3.13
+FROM python:3.9
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p staticfiles
+RUN mkdir -p static
 RUN chmod 755 db.sqlite3 
 
 ENV PYTHONUNBUFFERED=1

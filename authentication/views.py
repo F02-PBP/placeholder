@@ -141,3 +141,27 @@ def logout(request):
             "status": False,
             "message": f"Logout error: {str(e)}"
         }, status=500)
+    
+@csrf_exempt
+def check_auth_status(request):
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            return JsonResponse({
+                "status": True,
+                "user": {
+                    "username": request.user.username,
+                    "email": request.user.email,
+                    "full_name": user_profile.full_name,
+                    "interested_in": user_profile.interested_in
+                }
+            })
+        except UserProfile.DoesNotExist:
+            return JsonResponse({
+                "status": False,
+                "message": "User profile not found"
+            }, status=404)
+    return JsonResponse({
+        "status": False,
+        "message": "User tidak terautentikasi"
+    }, status=401)

@@ -6,3 +6,4 @@ psycopg2-binary
 requests
 urllib3
 pandas
+django-cors-headers

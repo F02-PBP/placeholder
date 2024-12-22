@@ -1,3 +1,4 @@
+from functools import wraps
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -138,7 +139,21 @@ def toggle_bookmark_flutter(request, restaurant_id):
         return JsonResponse({
             'error': str(e)
         }, status=500)
-@login_required
+    
+
+def flutter_login_required(view_func):
+    @wraps(view_func)
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                'success': False,
+                'message': 'Authentication required',
+                'login_url': '/auth/flutter-login/'
+            }, status=401)
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
+
+@flutter_login_required
 @csrf_exempt
 def get_bookmarks_flutter(request):
     try:

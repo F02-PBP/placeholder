@@ -1,12 +1,19 @@
-FROM python:3.9  
+FROM python:3.9
 
 WORKDIR /app
 
-COPY requirements.txt /app/
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY . /app/
+COPY . .
 
-RUN python manage.py migrate && python manage.py import_data
+ENV PYTHONUNBUFFERED=1
+ENV PORT=8000
 
-CMD ["gunicorn", "jogja_rasa.wsgi:application", "--bind", "0.0.0.0:8000"]
+RUN python manage.py collectstatic --noinput
+
+CMD gunicorn jogja_rasa.wsgi:application --bind 0.0.0.0:$PORT

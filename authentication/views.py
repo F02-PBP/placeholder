@@ -121,14 +121,23 @@ def check_auth_status(request):
 
 @csrf_exempt
 def logout(request):
-    if request.method == 'POST':
-        auth_logout(request)
-        return JsonResponse({
-            "status": True,
-            "message": "Logout berhasil!"
-        }, status=200)
+    try:
+        if request.method == 'POST':
+            auth_logout(request)
+            response = JsonResponse({
+                "status": True,
+                "message": "Logout berhasil!"
+            }, status=200)
+            response.delete_cookie('sessionid')
+            response.delete_cookie('csrftoken')
+            return response
 
-    return JsonResponse({
-        "status": False,
-        "message": "Method not allowed."
-    }, status=405)
+        return JsonResponse({
+            "status": False,
+            "message": "Method not allowed."
+        }, status=405)
+    except Exception as e:
+        return JsonResponse({
+            "status": False,
+            "message": f"Logout error: {str(e)}"
+        }, status=500)

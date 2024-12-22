@@ -1,15 +1,14 @@
-FROM python:3.9
+FROM python:3.13
 
 WORKDIR /app
-
-RUN apt-get update && apt-get install -y \
-    postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
+
+RUN mkdir -p staticfiles
+RUN chmod 755 db.sqlite3  # Make sure SQLite database is writable
 
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000

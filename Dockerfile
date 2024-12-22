@@ -8,7 +8,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 RUN mkdir -p staticfiles
-RUN chmod 755 db.sqlite3  # Make sure SQLite database is writable
+RUN chmod 755 db.sqlite3 
 
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
